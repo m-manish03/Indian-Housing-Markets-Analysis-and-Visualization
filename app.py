@@ -255,9 +255,9 @@ if selection == "Home":
     st.write("Analysis of housing markets in major Indian cities with regression models.")
     
     merged_plots(merged_df)
-    st.write("### Model Performance on Data")
-    merged_scores = models_evaluation(merged_df)
-    st.dataframe(merged_scores)
+    #st.write("### Model Performance on Data")
+    #merged_scores = models_evaluation(merged_df)
+    #st.dataframe(merged_scores)
     
     # Interactive Map
     st.sidebar.write("## Interactive Housing Map")
@@ -272,8 +272,9 @@ if selection == "Home":
 # City Pages
 else:
     st.title(f"{selection} Housing Market Analysis")
-    city_data = eval(f"{selection.lower()}_df")
+    city_dfs = {"bengaluru":ban_df,"chennai":chn_df,"delhi": del_df,"hyderabad":hyd_df,"mumbai_df":mum_df}
+    city_data = city_dfs.get(selection.lower())
     data_plots(city_data, selection)
-    st.write(f"### Model Performance in {selection}")
-    city_scores = models_evaluation(city_data)
-    st.dataframe(city_scores)
+    #st.write(f"### Model Performance in {selection}")
+    #city_scores = models_evaluation(city_data)
+    #st.dataframe(city_scores)
