@@ -376,8 +376,7 @@ view_mode = st.sidebar.selectbox("Select View", ["Simple", "Analyst"])
 # Main Page
 if selection == "Home":
     st.title("Indian Housing Market Analysis and Visualization")
-    st.write("## Project Description")
-    st.write("Analysis of housing markets in major Indian cities")
+
     combined_df = pd.read_csv('Data/Combined_data.csv')
     merged_plots(merged_df,combined_df)
     if view_mode == "Analyst":
