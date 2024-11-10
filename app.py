@@ -20,11 +20,11 @@ from sklearn.svm import SVR
 from sklearn.neighbors import KNeighborsRegressor
 
 # Load Data
-ban_df = pd.read_csv('C:/Users/prave/Documents/MiniProject/Data/Bangalore.csv')
-chn_df = pd.read_csv('C:/Users/prave/Documents/MiniProject/Data/Chennai.csv')
-del_df = pd.read_csv('C:/Users/prave/Documents/MiniProject/Data/Delhi.csv')
-hyd_df = pd.read_csv('C:/Users/prave/Documents/MiniProject/Data/Hyderabad.csv')
-mum_df = pd.read_csv('C:/Users/prave/Documents/MiniProject/Data/Mumbai.csv')
+ban_df = pd.read_csv('Data/Bangalore.csv')
+chn_df = pd.read_csv('Data/Chennai.csv')
+del_df = pd.read_csv('Data/Delhi.csv')
+hyd_df = pd.read_csv('Data/Hyderabad.csv')
+mum_df = pd.read_csv('Data/Mumbai.csv')
 
 #Replacing the 9 values with NaN
 ban_df.replace(9, np.nan, inplace=True)
