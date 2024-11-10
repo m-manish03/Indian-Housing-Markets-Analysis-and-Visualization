@@ -148,10 +148,12 @@ def data_plots(df, city):
         st.pyplot(fig3)
     
 def merged_plots(merged_df,combined_df):
+    '''
     st.write("### Merged Dataset Visualization")
     fig, ax = plt.subplots(figsize=(10, 6))
     sns.boxplot(x="City", y="Price", data=merged_df)
     st.pyplot(fig)
+    '''
     
     #Catplots of Price and Area against each City in the Merged data
     fig1 = sns.catplot(y='City', x='Price', data=merged_df, jitter=0.15, height=10, aspect=2)
