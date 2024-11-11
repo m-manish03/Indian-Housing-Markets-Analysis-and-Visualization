@@ -161,6 +161,24 @@ def merged_plots(merged_df,combined_df):
     HeatMap(heat_data, radius=10, max_zoom=13).add_to(city_map)
     folium_static(city_map)
     
+    # Median Price per Neighborhood
+    st.write("### Top Expensive Neighborhoods by Median Price")
+    top_neighborhoods = merged_df.groupby(['City', 'Location'])['Price'].median().reset_index()
+    top_neighborhoods = top_neighborhoods.groupby('City').apply(lambda x: x.nlargest(10, 'Price')).reset_index(drop=True)
+    fig, ax = plt.subplots(figsize=(10, 10))
+    sns.barplot(data=top_neighborhoods, y="Location", x="Price", hue="City", ax=ax)
+    ax.set_title("Top Expensive Neighborhoods by Median Price")
+    st.pyplot(fig)
+    
+    # Top 10 Popular Locations
+    st.write("### Top 10 Popular Locations ")
+    top_locations = merged_df['Location'].value_counts().head(10)
+    fig, ax = plt.subplots(figsize=(10, 6))
+    sns.barplot(x=top_locations.values, y=top_locations.index, palette='Blues_r', ax=ax)
+    ax.set_title('Top 10 Popular Locations')
+    ax.set_xlabel('Number of Listings')
+    st.pyplot(fig)
+    
     #Catplots of Price and Area against each City in the Merged data
     st.write("### House Price variation in these cities")
     fig1 = sns.catplot(y='City', x='Price', data=merged_df, jitter=0.15, height=10, aspect=2)
@@ -171,24 +189,6 @@ def merged_plots(merged_df,combined_df):
     fig2 = sns.catplot(y='City', x='Area', data=merged_df, jitter=0.15, height=10, aspect=2)
     fig2.figure.suptitle('House Area(in sq. ft) variation in these cities')
     st.pyplot(fig2.figure)
-    
-    # Median Price per Neighborhood
-    st.write("### Median Price per Neighborhood")
-    top_neighborhoods = merged_df.groupby(['City', 'Location'])['Price'].median().reset_index()
-    top_neighborhoods = top_neighborhoods.groupby('City').apply(lambda x: x.nlargest(10, 'Price')).reset_index(drop=True)
-    fig, ax = plt.subplots(figsize=(10, 10))
-    sns.barplot(data=top_neighborhoods, y="Location", x="Price", hue="City", ax=ax)
-    ax.set_title("Top Expensive Neighborhoods by Median Price")
-    st.pyplot(fig)
-    
-    # Top 10 Popular Locations by Count
-    st.write("### Top 10 Popular Locations ")
-    top_locations = merged_df['Location'].value_counts().head(10)
-    fig, ax = plt.subplots(figsize=(10, 6))
-    sns.barplot(x=top_locations.values, y=top_locations.index, palette='Blues_r', ax=ax)
-    ax.set_title('Top 10 Popular Locations')
-    ax.set_xlabel('Number of Listings')
-    st.pyplot(fig)
     
     # Price vs Area Scatter Plot with Trend Line
     st.write("### Price vs Area Scatter Plot with Trend Line by City")
@@ -399,7 +399,7 @@ if selection == "Home":
     if view_mode == "Analyst":
         st.write("### Model Performance on Data")
         #merged_scores = models_evaluation(merged_df)
-        merged_scores = all_scores[all_scores['City'] == 'merged_df']
+        merged_scores = all_scores[all_scores['City'] == 'merged_df'].drop(columns=['City'])
         st.dataframe(merged_scores)
     
     
@@ -412,5 +412,5 @@ else:
     if view_mode == "Analyst":
         st.write(f"### Model Performance in {selection}")
         #city_scores = models_evaluation(city_data)
-        city_scores = all_scores[all_scores['City'] == selection]
+        city_scores = all_scores[all_scores['City'] == selection].drop(columns=['City'])
         st.dataframe(city_scores)
