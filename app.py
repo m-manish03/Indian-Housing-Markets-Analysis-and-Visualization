@@ -129,18 +129,18 @@ def data_plots(df, city):
     
     #Catplots of Price and Area
     st.write('### House Price(in lakhs) variation in ' + city)
-    fig1 = sns.catplot(y='Location', x='Price', data=df, jitter=0.15, height=15, aspect=1)
+    fig1 = sns.catplot(y='Location', x='Price', data=df, jitter=0.15, height=15, aspect=0.5)
     fig1.figure.suptitle('House Price(in lakhs) variation in ' + city)
     st.pyplot(fig1.figure)
     
     st.write('###  House Area(in sq. ft) variation in ' + city)
-    fig2 = sns.catplot(y='Location', x='Area', data=df, jitter=0.15, height=15, aspect=1.5)
+    fig2 = sns.catplot(y='Location', x='Area', data=df, jitter=0.15, height=15, aspect=0.5)
     fig2.figure.suptitle('House Area(in sq. ft) variation in ' + city)
     st.pyplot(fig2.figure)
     
     if view_mode == "Analyst":
         #Correlation heatmap of the attributes in each city
-        st.write('###Correlation heatmap of the attributes in ' + city)
+        st.write('### Correlation heatmap of the attributes in ' + city)
         numeric_correlation = df.select_dtypes(exclude=object).corr()
         fig3, ax = plt.subplots(figsize=(20, 20))
         sns.heatmap(numeric_correlation, annot=True, square=True, fmt='.1f', ax=ax)
@@ -162,12 +162,12 @@ def merged_plots(merged_df,combined_df):
     folium_static(city_map)
     
     #Catplots of Price and Area against each City in the Merged data
-    st.write("House Price variation in these cities")
+    st.write("### House Price variation in these cities")
     fig1 = sns.catplot(y='City', x='Price', data=merged_df, jitter=0.15, height=10, aspect=2)
     fig1.figure.suptitle('House Price(in lakhs) variation in these cities') 
     st.pyplot(fig1.figure)
 
-    st.write("House Area variation in these cities")
+    st.write("### House Area variation in these cities")
     fig2 = sns.catplot(y='City', x='Area', data=merged_df, jitter=0.15, height=10, aspect=2)
     fig2.figure.suptitle('House Area(in sq. ft) variation in these cities')
     st.pyplot(fig2.figure)
@@ -377,6 +377,8 @@ else:
 # Analyst toggle
 view_mode = st.sidebar.selectbox("Select View", ["Simple", "Analyst"])
 
+all_scores = pd.read_csv('Data/model_evaluation_results.csv')
+
 # Main Page
 if selection == "Home":
     st.title("Indian Housing Market Analysis and Visualization")
@@ -396,8 +398,10 @@ if selection == "Home":
     merged_plots(merged_df,combined_df)
     if view_mode == "Analyst":
         st.write("### Model Performance on Data")
-        merged_scores = models_evaluation(merged_df)
+        #merged_scores = models_evaluation(merged_df)
+        merged_scores = all_scores[all_scores['City'] == 'merged_df']
         st.dataframe(merged_scores)
+    
     
 # City Pages
 else:
@@ -407,5 +411,6 @@ else:
     data_plots(city_data, selection)
     if view_mode == "Analyst":
         st.write(f"### Model Performance in {selection}")
-        city_scores = models_evaluation(city_data)
+        #city_scores = models_evaluation(city_data)
+        city_scores = all_scores[all_scores['City'] == selection]
         st.dataframe(city_scores)
