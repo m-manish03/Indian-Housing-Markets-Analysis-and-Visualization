@@ -156,7 +156,7 @@ def merged_plots(merged_df,combined_df):
     '''
     # Heatmap of Most Expensive Locations
     st.write("### Heatmap of Most Expensive Locations")
-    city_map = folium.Map(location=[20.5937, 78.9629], zoom_start=7)  # Center on India
+    city_map = folium.Map(location=[20.5937, 78.9629], zoom_start=5)  # Center on India
     heat_data = [[row['Latitude'], row['Longitude'], row['Price']] for index, row in combined_df.iterrows() if pd.notnull(row['Latitude']) and pd.notnull(row['Longitude'])]
     HeatMap(heat_data, radius=10, max_zoom=13).add_to(city_map)
     folium_static(city_map)
@@ -202,6 +202,7 @@ def merged_plots(merged_df,combined_df):
     
     # Smooth line graph of the House price vs Area with respect to each city in the merged data
     #filtered_df = merged_df[merged_df['Price'] <= 600]
+    st.write("### Price vs Area line graph Plot  with respect to each city")
     window_size = 15
     smoothed_df = (
         merged_df.groupby('City')
