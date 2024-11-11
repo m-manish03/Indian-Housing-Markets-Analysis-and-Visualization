@@ -69,13 +69,6 @@ def data_plots(df, city):
     ax.set_xlabel('Number of Listings')
     st.pyplot(fig)
 
-    # Countplot of the Properties at every location in each city
-    st.write('### Number of units at each location ' + city)
-    fig, ax = plt.subplots(figsize=(20, 8))
-    sns.countplot(y='Location', data=df, order=df.Location.value_counts().index[:25], ax=ax)
-    ax.set_title('Number of units at each location in ' + city)
-    st.pyplot(fig) 
-
     # Bar plot of Affordable locations by location
     st.write('### Most Affordable Areas by Median Price in ' + city)
     fig, ax = plt.subplots(figsize=(10, 10))
@@ -102,6 +95,13 @@ def data_plots(df, city):
     ax.set_title('Most Demanded Locations in ' + city)
     st.pyplot(fig)
     
+    # Countplot of the Properties at every location in each city
+    st.write('### Number of units at each location ' + city)
+    fig, ax = plt.subplots(figsize=(20, 8))
+    sns.countplot(y='Location', data=df, order=df.Location.value_counts().index[:25], ax=ax)
+    ax.set_title('Number of units at each location in ' + city)
+    st.pyplot(fig) 
+
     #Distribution plot of Sale Price across each city
     st.write('### Distribution of Sales across ' + city)
     fig, ax = plt.subplots(1, 2, figsize=(20,5))
@@ -129,12 +129,12 @@ def data_plots(df, city):
     
     #Catplots of Price and Area
     st.write('### House Price(in lakhs) variation in ' + city)
-    fig1 = sns.catplot(y='Location', x='Price', data=df, jitter=0.15, height=20, aspect=2)
+    fig1 = sns.catplot(y='Location', x='Price', data=df, jitter=0.15, height=15, aspect=3)
     fig1.figure.suptitle('House Price(in lakhs) variation in ' + city)
     st.pyplot(fig1.figure)
     
     st.write('###  House Area(in sq. ft) variation in ' + city)
-    fig2 = sns.catplot(y='Location', x='Area', data=df, jitter=0.15, height=30, aspect=2)
+    fig2 = sns.catplot(y='Location', x='Area', data=df, jitter=0.15, height=15, aspect=4)
     fig2.figure.suptitle('House Area(in sq. ft) variation in ' + city)
     st.pyplot(fig2.figure)
     
