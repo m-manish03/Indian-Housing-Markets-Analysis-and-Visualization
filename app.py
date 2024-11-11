@@ -59,20 +59,22 @@ def merge_all(df1, df2, df3, df4, df5):
 
 merged_df = merge_all(ban_df, chn_df, del_df, hyd_df, mum_df)
 
-def data_plots(df, city):    
-    # Scatter plot
-    st.write('### Area(sq. ft) vs Price(lakhs) in ' + city)
-    fig, ax = plt.subplots(figsize=(15, 8))
-    sns.scatterplot(x=df['Price'], y=df['Area'], hue=df['No. of Bedrooms'], ax=ax)
-    ax.set_title('Area(sq. ft) vs Price(lakhs) in ' + city)
-    st.pyplot(fig)  # Pass the figure to st.pyplot()
+def data_plots(df, city):
+    # Top 10 Popular Locations by Count
+    st.write("### Top 10 Popular Locations ")
+    top_locations = df['Location'].value_counts().head(10)
+    fig, ax = plt.subplots(figsize=(10, 6))
+    sns.barplot(x=top_locations.values, y=top_locations.index, palette='Blues_r', ax=ax)
+    ax.set_title('Top 10 Popular Locations')
+    ax.set_xlabel('Number of Listings')
+    st.pyplot(fig)
 
     # Countplot of the Properties at every location in each city
     st.write('### Number of units at each location ' + city)
     fig, ax = plt.subplots(figsize=(20, 8))
     sns.countplot(y='Location', data=df, order=df.Location.value_counts().index[:25], ax=ax)
     ax.set_title('Number of units at each location in ' + city)
-    st.pyplot(fig)  # Pass the figure to st.pyplot()
+    st.pyplot(fig) 
 
     # Bar plot of Affordable locations by location
     st.write('### Most Affordable Areas by Median Price in ' + city)
@@ -108,13 +110,11 @@ def data_plots(df, city):
     sns.histplot(np.log(df['Price']), kde=True, ax=ax[1])
     st.pyplot(fig)
     
-    # Top 10 Popular Locations by Count
-    st.write("### Top 10 Popular Locations ")
-    top_locations = df['Location'].value_counts().head(10)
-    fig, ax = plt.subplots(figsize=(10, 6))
-    sns.barplot(x=top_locations.values, y=top_locations.index, palette='Blues_r', ax=ax)
-    ax.set_title('Top 10 Popular Locations')
-    ax.set_xlabel('Number of Listings')
+    # Scatter plot
+    st.write('### Area(sq. ft) vs Price(lakhs) in ' + city)
+    fig, ax = plt.subplots(figsize=(15, 8))
+    sns.scatterplot(x=df['Price'], y=df['Area'], hue=df['No. of Bedrooms'], ax=ax)
+    ax.set_title('Area(sq. ft) vs Price(lakhs) in ' + city)
     st.pyplot(fig)
     
     # Price vs Area Scatter Plot with Trend Line
@@ -129,12 +129,12 @@ def data_plots(df, city):
     
     #Catplots of Price and Area
     st.write('### House Price(in lakhs) variation in ' + city)
-    fig1 = sns.catplot(y='Location', x='Price', data=df, jitter=0.15, height=10, aspect=2)
+    fig1 = sns.catplot(y='Location', x='Price', data=df, jitter=0.15, height=20, aspect=2)
     fig1.figure.suptitle('House Price(in lakhs) variation in ' + city)
     st.pyplot(fig1.figure)
     
     st.write('###  House Area(in sq. ft) variation in ' + city)
-    fig2 = sns.catplot(y='Location', x='Area', data=df, jitter=0.15, height=10, aspect=2)
+    fig2 = sns.catplot(y='Location', x='Area', data=df, jitter=0.15, height=30, aspect=2)
     fig2.figure.suptitle('House Area(in sq. ft) variation in ' + city)
     st.pyplot(fig2.figure)
     
@@ -154,15 +154,6 @@ def merged_plots(merged_df,combined_df):
     sns.boxplot(x="City", y="Price", data=merged_df)
     st.pyplot(fig)
     '''
-    
-    #Catplots of Price and Area against each City in the Merged data
-    fig1 = sns.catplot(y='City', x='Price', data=merged_df, jitter=0.15, height=10, aspect=2)
-    fig1.figure.suptitle('House Price(in lakhs) variation in these cities') 
-    st.pyplot(fig1.figure)  
-    fig2 = sns.catplot(y='City', x='Area', data=merged_df, jitter=0.15, height=10, aspect=2)
-    fig2.figure.suptitle('House Area(in sq. ft) variation in these cities')
-    st.pyplot(fig2.figure)
-    
     # Heatmap of Most Expensive Locations
     st.write("### Heatmap of Most Expensive Locations")
     city_map = folium.Map(location=[20.5937, 78.9629], zoom_start=5)  # Center on India
@@ -170,13 +161,24 @@ def merged_plots(merged_df,combined_df):
     HeatMap(heat_data, radius=10, max_zoom=13).add_to(city_map)
     folium_static(city_map)
     
+    #Catplots of Price and Area against each City in the Merged data
+    st.write("House Price variation in these cities")
+    fig1 = sns.catplot(y='City', x='Price', data=merged_df, jitter=0.15, height=10, aspect=2)
+    fig1.figure.suptitle('House Price(in lakhs) variation in these cities') 
+    st.pyplot(fig1.figure)
+
+    st.write("House Area variation in these cities")
+    fig2 = sns.catplot(y='City', x='Area', data=merged_df, jitter=0.15, height=10, aspect=2)
+    fig2.figure.suptitle('House Area(in sq. ft) variation in these cities')
+    st.pyplot(fig2.figure)
+    
     # Median Price per Neighborhood
     st.write("### Median Price per Neighborhood")
     top_neighborhoods = merged_df.groupby(['City', 'Location'])['Price'].median().reset_index()
     top_neighborhoods = top_neighborhoods.groupby('City').apply(lambda x: x.nlargest(10, 'Price')).reset_index(drop=True)
     fig, ax = plt.subplots(figsize=(10, 10))
     sns.barplot(data=top_neighborhoods, y="Location", x="Price", hue="City", ax=ax)
-    ax.set_title("Top 10 Expensive Neighborhoods by Median Price")
+    ax.set_title("Top Expensive Neighborhoods by Median Price")
     st.pyplot(fig)
     
     # Top 10 Popular Locations by Count
@@ -189,7 +191,7 @@ def merged_plots(merged_df,combined_df):
     st.pyplot(fig)
     
     # Price vs Area Scatter Plot with Trend Line
-    st.write("### Price vs Area Scatter Plot with Trend Line")
+    st.write("### Price vs Area Scatter Plot with Trend Line by City")
     fig, ax = plt.subplots(figsize=(12, 8))
     sns.scatterplot(data=merged_df, x='Area', y='Price', hue='City', palette='tab10', ax=ax)
     sns.regplot(data=merged_df, x='Area', y='Price', scatter=False, color='gray', line_kws={"linewidth": 1, "linestyle": "dashed"}, ax=ax)
@@ -378,7 +380,18 @@ view_mode = st.sidebar.selectbox("Select View", ["Simple", "Analyst"])
 # Main Page
 if selection == "Home":
     st.title("Indian Housing Market Analysis and Visualization")
-
+    st.markdown("""
+    ### Introduction
+    Welcome to the Indian Housing Markets Analysis and Visualization app. This tool provides a comprehensive analysis of the housing markets across major Indian cities, enabling users to explore trends, pricing dynamics, and demand hotspots in an interactive way.
+    
+    ### Project Description
+    The app leverages advanced data analytics to uncover valuable insights from housing market data across key Indian cities. Using data visualization techniques, we present clear, data-driven insights into pricing trends, neighborhood demand, and affordability.
+    
+    ### Key Features
+    - **City-wise Insights**: Analyze housing trends, average prices, and demand in major metropolitan areas.
+    - **Interactive Visualizations**: Explore data with scatter plots, bar charts, count plots, and heatmaps to understand market trends.
+    - **Location Analysis**: Identify affordable areas, high-demand neighborhoods, and view data on interactive maps.
+        """)
     combined_df = pd.read_csv('Data/Combined_data.csv')
     merged_plots(merged_df,combined_df)
     if view_mode == "Analyst":
