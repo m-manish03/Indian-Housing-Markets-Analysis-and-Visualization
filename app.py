@@ -129,12 +129,12 @@ def data_plots(df, city):
     
     #Catplots of Price and Area
     st.write('### House Price(in lakhs) variation in ' + city)
-    fig1 = sns.catplot(y='Location', x='Price', data=df, jitter=0.15, height=15, aspect=3)
+    fig1 = sns.catplot(y='Location', x='Price', data=df, jitter=0.15, height=15, aspect=1)
     fig1.figure.suptitle('House Price(in lakhs) variation in ' + city)
     st.pyplot(fig1.figure)
     
     st.write('###  House Area(in sq. ft) variation in ' + city)
-    fig2 = sns.catplot(y='Location', x='Area', data=df, jitter=0.15, height=15, aspect=4)
+    fig2 = sns.catplot(y='Location', x='Area', data=df, jitter=0.15, height=15, aspect=1.5)
     fig2.figure.suptitle('House Area(in sq. ft) variation in ' + city)
     st.pyplot(fig2.figure)
     
