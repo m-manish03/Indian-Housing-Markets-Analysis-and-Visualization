@@ -156,7 +156,7 @@ def merged_plots(merged_df,combined_df):
     '''
     # Heatmap of Most Expensive Locations
     st.write("### Heatmap of Most Expensive Locations")
-    city_map = folium.Map(location=[20.5937, 78.9629], zoom_start=5)  # Center on India
+    city_map = folium.Map(location=[20.5937, 78.9629], zoom_start=7)  # Center on India
     heat_data = [[row['Latitude'], row['Longitude'], row['Price']] for index, row in combined_df.iterrows() if pd.notnull(row['Latitude']) and pd.notnull(row['Longitude'])]
     HeatMap(heat_data, radius=10, max_zoom=13).add_to(city_map)
     folium_static(city_map)
@@ -216,6 +216,7 @@ def merged_plots(merged_df,combined_df):
     st.pyplot(fig)
     
     # Interactive Map
+    st.write('### Interactive Map that shows all locations in the dataset')
     city_map = folium.Map(location=[17.401, 78.477], zoom_start=12)
     mc = MarkerCluster()
     for idx, row in combined_df.iterrows():
@@ -225,6 +226,7 @@ def merged_plots(merged_df,combined_df):
     
     if view_mode == "Analyst":
         #Correlation heatmap of the Merged Data
+        st.write('### Correlation heatmap of the attributes')
         numeric_correlation = merged_df.select_dtypes(exclude=object).corr()
         fig3, ax = plt.subplots(figsize=(20, 20))
         sns.heatmap(numeric_correlation, annot=True, square=True, fmt='.1f', ax=ax)
