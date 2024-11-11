@@ -400,7 +400,7 @@ if selection == "Home":
         st.write("### Model Performance on Data")
         #merged_scores = models_evaluation(merged_df)
         merged_scores = all_scores[all_scores['City'] == 'merged_df'].drop(columns=['City'])
-        st.dataframe(merged_scores)
+        st.dataframe(merged_scores.reset_index(drop=True))
     
     
 # City Pages
@@ -413,4 +413,4 @@ else:
         st.write(f"### Model Performance in {selection}")
         #city_scores = models_evaluation(city_data)
         city_scores = all_scores[all_scores['City'] == selection].drop(columns=['City'])
-        st.dataframe(city_scores)
+        st.dataframe(city_scores.reset_index(drop=True))
